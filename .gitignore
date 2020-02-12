@@ -1,0 +1,5 @@
+# Add here the files that you should not be available in version control
+
+/venv/*
+/config/log/*
+__pycache__
