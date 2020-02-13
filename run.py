@@ -1,11 +1,23 @@
 from flask import Flask
+from config import Config
+import logging
 
 from app.api.api import main_api_blueprint
 from app.api.auth import auth_bp
 
 app = Flask(__name__)
 
-app.config.from_object('config')
+app.config.from_object(Config)
+
+logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
+
+logging.info("{}".format(app.config))
+
+
+
+# logging.debug('This message should go to the log file')
+# logging.info('So should this')
+# logging.warning('And this, too')
 
 default_api_url = "/api"
 
