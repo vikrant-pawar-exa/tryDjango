@@ -1,1 +1,6 @@
+# Add here the files that you should not be available in version control
+
+/venv/*
+/log/*
+__pycache__
 .idea
