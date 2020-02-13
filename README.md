@@ -19,3 +19,4 @@ Open http://localhost:5000/ to view it in the browser.
 
 Use `pip freeze > requirements.txt` command each time when install any new package so that we can maintain the cross platform dependency 
 
+Use this command to install dependency packages `pip install -r requirements.txt`
