@@ -8,5 +8,6 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
 
+
 class StagingConfig(Config):
     TESTING = True

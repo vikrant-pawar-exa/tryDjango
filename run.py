@@ -15,3 +15,6 @@ app.register_blueprint(auth_bp, url_prefix=default_api_url)
 @app.errorhandler(404)
 def page_not_found(error):
   return "This api not available....use /api"
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0")
