@@ -1,5 +1,5 @@
 from flask import Flask
-from config import Config
+from config import Config, ProductionConfig
 import logging
 
 from app.api.api import main_api_blueprint
@@ -7,17 +7,14 @@ from app.api.auth import auth_bp
 
 app = Flask(__name__)
 
-app.config.from_object(Config)
+if app.config["ENV"] == "production":
+  app.config.from_object(ProductionConfig)
+  logging.basicConfig(filename='log/production.log',level=logging.INFO)
+else:
+  app.config.from_object(Config)
+  logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
 
-logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
-
-logging.info("{}".format(app.config))
-
-
-
-# logging.debug('This message should go to the log file')
-# logging.info('So should this')
-# logging.warning('And this, too')
+# logging.debug("-------------------------{}-----".format(app.config))
 
 default_api_url = "/api"
 
