@@ -1,12 +1,16 @@
 FROM python:3.8.1-slim-buster
 
-COPY ./requirements.txt /requirements.txt
+WORKDIR /home/
 
-WORKDIR /
+COPY ./requirements.txt /home/requirements.txt
+
 RUN pip3 install -r requirements.txt
-COPY . /
+COPY . /home/.
 
 
-ENTRYPOINT [ "python3" ]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
 
-CMD [ "app/app.py" ]
+#ENTRYPOINT [ "python3" ]
+
+# CMD [ "app/app.py" ]
+#CMD [ "run.py" ]
