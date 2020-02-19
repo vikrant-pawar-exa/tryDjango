@@ -1,4 +1,5 @@
 from flask import Blueprint
+from app.utils.custom_response import make_resp
 from flask_restful import reqparse, abort, Api, Resource
 
 from app.api.external.jira import *
@@ -11,8 +12,7 @@ api = Api(main_api_blueprint)
 
 @main_api_blueprint.route('/')
 def index():
-    return "This is a main api ..."
-
+  return make_resp({"message":"api working"})
 
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
 api.add_resource(TicketUnresolved, '/tickets/unresolve_ticket')
