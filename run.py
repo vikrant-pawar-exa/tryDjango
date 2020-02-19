@@ -29,6 +29,7 @@ def verify_access_token():
       elif api_token_list[0].lower() != 'bearer':
         return make_resp({"message":"Token invalid"}, 401)
       else:
+        a
         okta_userinfo_url = "{}/oauth2/default/v1/userinfo".format(app.config["OKTA_HOST_URL"])
         headers = {'Content-Type':'application/json','Authorization': api_token}
         resp_info = requests.post(okta_userinfo_url, headers=headers)
@@ -36,7 +37,8 @@ def verify_access_token():
           return make_resp({"message":"Invalid credentials"}, resp_info.status_code)
         else:
           logging.debug("------User--{}---Status---{}---".format(resp_info.json()["email"], resp_info))  
-  except:
+  except Exception as e:
+    logging.error("----Exception in OKTA API : {}".format(sys.exc_info()[1]))
     return make_resp({"message":"Exception in API: {}".format(sys.exc_info()[1])}, 422)
 
 default_api_url = "/api"
