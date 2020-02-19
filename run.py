@@ -29,7 +29,6 @@ def verify_access_token():
       elif api_token_list[0].lower() != 'bearer':
         return make_resp({"message":"Token invalid"}, 401)
       else:
-        a
         okta_userinfo_url = "{}/oauth2/default/v1/userinfo".format(app.config["OKTA_HOST_URL"])
         headers = {'Content-Type':'application/json','Authorization': api_token}
         resp_info = requests.post(okta_userinfo_url, headers=headers)
