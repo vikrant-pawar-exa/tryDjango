@@ -4,7 +4,7 @@ class Config(object):
     USERNAME_JIRA = ""
     PASSWORD_JIRA = ""
     HOST_JIRA = ""
-
+    OKTA_HOST_URL = 'https://dev-780755.okta.com'
 
 class ProductionConfig(Config):
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
