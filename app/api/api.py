@@ -4,6 +4,7 @@ from flask_restful import reqparse, abort, Api, Resource
 
 from app.api.external.jira import *
 from app.test_cases.sbt import sbt_resource
+from app.api.user import *
 
 main_api_blueprint = Blueprint('main_api_blueprint', __name__)
 
@@ -14,6 +15,7 @@ api = Api(main_api_blueprint)
 def index():
   return make_resp({"message":"api working"})
 
+api.add_resource(OktaUserInfo, '/users/user_info')
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
 api.add_resource(TicketUnresolved, '/ticket/unresolve_ticket')
 api.add_resource(Ticket, '/ticket')
