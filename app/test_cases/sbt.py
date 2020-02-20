@@ -2,6 +2,8 @@
 # This class is responsible for calling SBT tool and getting results
 import logging
 import os
+from random import randint
+from ansi2html import Ansi2HTMLConverter
 
 from flask_restful import reqparse, abort, Api, Resource
 
@@ -9,32 +11,29 @@ import subprocess
 
 logger = logging.getLogger(__name__)
 
+
 class sbt_resource(Resource):
 
     def __init__(self):
         self.result = 'test'
 
-
     def get(self, ticket_id):
-
-
         try:
             my_sbt = SBT()
-            (out , err )= my_sbt.run_test()
+            out = my_sbt.get_html_sbt()
             # print("Received", ticket_id)
             print("Output --- Got Ouput " + out)
-            print("Error" + err)
-            return "Received" + out, 200
+            return out, 200
 
         except ValueError as v:
-            print ( "Value Error")
-            return "Error" + str(v) , 500
+            print("Value Error")
+            return "Error" + str(v), 500
 
     def execute_sbt(self):
         return self.result
 
 
-class SBT():
+class SBT:
     """
     Main class to execute sbt test
     """
@@ -52,19 +51,32 @@ class SBT():
 
         self.workdir = workdir
 
-    def run_test(self):
+    def get_html_sbt(self):
+        tmp_file = self.run_sbt_file()
+        conv = Ansi2HTMLConverter()
+
+        with open(tmp_file) as f:
+            content = f.readlines()
+        raw_txt = " "
+        for c in content:
+            raw_txt = raw_txt + c
+        #
+        # with open('sbt_html.html', 'w') as f:
+        #     f.write(conv.convert(raw_txt))
+        final_html = conv.convert(raw_txt)
+        return raw_txt
+
+    def run_sbt_file(self):
         sbt_path = "/home/vikrant/sbt/sbt/bin/sbt"
         logger.info("Running command %s test and %s", sbt_path, self.workdir)
-    
-        with open("/tmp/foo", "w" ) as file:
-            output = subprocess.run(["/home/vikrant/sbt/sbt/bin/sbt","test"] ,stdout=file, cwd=self.workdir)
+        n = 10
+        tmp_file = "/tmp/tmp_sbt" + ''.join(["{}".format(randint(0, 9)) for num in range(0, n)])
+
+        with open(tmp_file, "w") as file:
+            output = subprocess.run(["/home/vikrant/sbt/sbt/bin/sbt", "test"], stdout=file, cwd=self.workdir)
             err = "--"
 
-        logger.debug("sbt output %s ",  output)
-        # p = subprocess.Popen(["ls", "-ltrs"], stdout=subprocess.PIPE, shell=True)
-        # (output, err) = p.communicate()
+        logger.debug("sbt command executed %s" , output )
+        logger.debug("sbt output is stored at  %s ", tmp_file)
 
-        print("Output" + str(output))
-        print("Error" + str(err))
-
-        return str(output), str(err)
+        return tmp_file
