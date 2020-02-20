@@ -1,4 +1,6 @@
-from flask import Flask
+from flask import Flask, request
+from config import Config, ProductionConfig, DevelopmentConfig
+import logging, requests, sys
 from flask_restful import Api
 
 from app.api.api import main_api_blueprint
@@ -6,7 +8,13 @@ from app.api.auth import auth_bp
 
 app = Flask("CA_backend")
 
-app.config.from_object('config')
+if app.config["ENV"] == "production":
+  app.config.from_object(ProductionConfig)
+  logging.basicConfig(filename='log/production.log',level=logging.INFO)
+else:
+  app.config.from_object(DevelopmentConfig)
+  logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
+
 
 default_api_url = "/api"
 api = Api(app)

@@ -5,3 +5,4 @@ class Constants(object):
     GET_COMMENTS_URL = "/rest/api/2/issue/{}/comment"
     UPDATE_COMMENT_URL = "/rest/api/2/issue/{}/comment/{}"
     ADD_ATTACHMENT_URL = "/rest/api/2/issue/{}/attachments"
+    GET_STATUS_URL = "/rest/api/2/issue/{}/transitions"
