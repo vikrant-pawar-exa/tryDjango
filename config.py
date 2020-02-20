@@ -3,7 +3,7 @@ class Config(object):
     TESTING = False
     USERNAME_JIRA = ""
     PASSWORD_JIRA = ""
-    HOST_JIRA = ""
+    HOST_JIRA = "exabeam.atlassian.net"
 
 
 class ProductionConfig(Config):

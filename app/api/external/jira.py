@@ -24,7 +24,7 @@ class TicketUnresolved(Resource):
         """
         try:
             logging.info('Enter in get TicketUnresolved JIRA api')
-            assigneeEmail = request.headers.get('email', '')
+            assigneeEmail = request.args.get('assignee', default='',type=str)
             if assigneeEmail == '':
                 raise BadRequest()
             url = SCHEME + Config.HOST_JIRA + Constants.UNRESOLVED_TICKET_URL.format(assigneeEmail)
@@ -52,7 +52,7 @@ class Ticket(Resource):
         logging.info('Enter in get Ticket JIRA api')
         try:
             maxResults = request.args.get('maxResults', default=50, type=str)
-            assigneeEmail = request.headers.get('email', '')
+            assigneeEmail = request.args.get('assignee', default='', type=str)
             if assigneeEmail == '':
                 raise BadRequest()
             url = SCHEME + Config.HOST_JIRA+ Constants.GET_TICKET_URL.format(assigneeEmail, maxResults)
