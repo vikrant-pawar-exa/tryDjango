@@ -2,12 +2,14 @@ from flask import Flask, request
 from config import Config, ProductionConfig, DevelopmentConfig
 import logging, requests, sys
 from flask_restful import Api
+from flask_cors import CORS
 
 from app.api.api import main_api_blueprint
 from app.api.auth import auth_bp
 from app.utils.custom_response import make_resp
 
 app = Flask("CA_backend")
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 if app.config["ENV"] == "production":
   app.config.from_object(ProductionConfig)
