@@ -72,12 +72,13 @@ class SBT:
 
     def run_sbt_file(self):
         sbt_path = "/home/vikrant/sbt/sbt/bin/sbt"
+        sbt_path = "sbt"
         logger.info("Running command %s test and %s", sbt_path, self.workdir)
         n = 10
         tmp_file = "/tmp/tmp_sbt" + ''.join(["{}".format(randint(0, 9)) for num in range(0, n)])
 
         with open(tmp_file, "w") as file:
-            output = subprocess.run(["/home/vikrant/sbt/sbt/bin/sbt", "test"], stdout=file, cwd=self.workdir)
+            output = subprocess.run(["sbt", "test"], stdout=file, cwd=self.workdir)
             err = "--"
 
         logger.debug("sbt command executed %s" , output )
