@@ -1,15 +1,22 @@
-FROM python:3.8.1-slim-buster
+FROM openjdk:15-oraclelinux7
 
 WORKDIR /home/
 
-COPY ./requirements.txt /home/requirements.txt
+RUN curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo
+RUN yum install -y sbt 
 
-RUN pip3 install -r requirements.txt
+RUN sbt test
+
+RUN yum install -y python3
+
+#WORKDIR /home/
+
 COPY . /home/.
 
-
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN pip3 install -r requirements.txt
 
 ENTRYPOINT [ "python3" ]
 
 CMD [ "run.py" ]
+
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
