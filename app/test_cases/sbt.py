@@ -22,7 +22,7 @@ class sbt_resource(Resource):
             my_sbt = SBT()
             (out , err )= my_sbt.run_test()
             # print("Received", ticket_id)
-            print("Output" + out)
+            print("Output --- Got Ouput " + out)
             print("Error" + err)
             return "Received" + out, 200
 
@@ -53,9 +53,14 @@ class SBT():
         self.workdir = workdir
 
     def run_test(self):
-        output = subprocess.run("cd "+self.workdir + "; sbt test")
-        err = "--"
+        sbt_path = "/home/vikrant/sbt/sbt/bin/sbt"
+        logger.info("Running command %s test and %s", sbt_path, self.workdir)
+    
+        with open("/tmp/foo", "w" ) as file:
+            output = subprocess.run(["/home/vikrant/sbt/sbt/bin/sbt","test"] ,stdout=file, cwd=self.workdir)
+            err = "--"
 
+        logger.debug("sbt output %s ",  output)
         # p = subprocess.Popen(["ls", "-ltrs"], stdout=subprocess.PIPE, shell=True)
         # (output, err) = p.communicate()
 

@@ -11,6 +11,7 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    TESTING = True
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
 
 
