@@ -4,6 +4,8 @@ import logging
 import os
 from random import randint
 from ansi2html import Ansi2HTMLConverter
+from flask import Flask, render_template, send_file
+
 
 from flask_restful import reqparse, abort, Api, Resource
 
@@ -22,8 +24,10 @@ class sbt_resource(Resource):
             my_sbt = SBT()
             out = my_sbt.get_html_sbt()
             # print("Received", ticket_id)
-            print("Output --- Got Ouput " + out)
-            return out, 200
+            print("Output --- Got Ouput Request " + out)
+        
+
+            return send_file(out)
 
         except ValueError as v:
             print("Value Error")
@@ -60,11 +64,11 @@ class SBT:
         raw_txt = " "
         for c in content:
             raw_txt = raw_txt + c
-        #
-        # with open('sbt_html.html', 'w') as f:
-        #     f.write(conv.convert(raw_txt))
-        final_html = conv.convert(raw_txt)
-        return raw_txt
+        
+        with open(tmp_file + '.html', 'w') as f:
+            f.write(conv.convert(raw_txt))
+        #final_html = conv.convert(raw_txt)
+        return tmp_file + '.html' 
 
     def run_sbt_file(self):
         sbt_path = "/home/vikrant/sbt/sbt/bin/sbt"
