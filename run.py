@@ -16,7 +16,7 @@ else:
   app.config.from_object(DevelopmentConfig)
   logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
 
-@app.before_request
+#@app.before_request
 def verify_access_token():
   try:
     if 'api-accessToken' not in request.headers:
