@@ -1,9 +1,11 @@
 from flask import Blueprint
 from app.utils.custom_response import make_resp
 from flask_restful import reqparse, abort, Api, Resource
+from config import Config
 
 from app.api.external.jira import *
 from app.test_cases.sbt import sbt_resource
+from app.test_cases.manual_steps import Lime
 
 main_api_blueprint = Blueprint('main_api_blueprint', __name__)
 
@@ -15,10 +17,11 @@ def index():
   return make_resp({"message":"api working"})
 
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
-api.add_resource(TicketUnresolved, '/ticket/unresolve_ticket')
-api.add_resource(Ticket, '/ticket')
-api.add_resource(Comments, '/ticket/<issueIdOrKey>/comments')
-api.add_resource(UpdateComments, '/ticket/<issueIdOrKey>/comments/<commentId>',methods=['PUT'])
-api.add_resource(Transition, '/ticket/<issueIdOrKey>/transition', methods=['POST', 'GET'])
-api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
+api.add_resource(TicketUnresolved, '/tickets/unresolve_ticket')
+api.add_resource(Ticket, '/tickets', endpoint="tickets")
+api.add_resource(Comments, '/comments/<issueIdOrKey>')
+api.add_resource(UpdateComments, '/comments/<issueIdOrKey>/<commentId>',methods=['PUT'])
+api.add_resource(Attachment, '/attach/<issueIdOrKey>', methods=['POST'])
 
+#Lime api
+api.add_resource(Lime, '/lime/setup', methods=['POST'])
