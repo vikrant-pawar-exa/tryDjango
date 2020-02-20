@@ -1,11 +1,13 @@
 # SBT
 # This class is responsible for calling SBT tool and getting results
+import logging
 import os
 
 from flask_restful import reqparse, abort, Api, Resource
 
 import subprocess
 
+logger = logging.getLogger(__name__)
 
 class sbt_resource(Resource):
 
@@ -38,12 +40,15 @@ class SBT():
     """
 
     def __init__(self, workdir='/home/vikrant/exa_security'):
-        # print("Using workdir as " + workdir)
-        # if not os.path.isdir(workdir):
-        #     raise ValueError(workdir + "Doesn't exists, probably initialisation failed")
-        #
-        # if not os.path.isfile(os.path.join(workdir, "build.sbt")):
-        #     raise ValueError("build.sbt Doesn't exists, EXA_HOME isn't set correctly call may have failed")
+        logger.info("Using workdir %s", workdir)
+        if not os.path.isdir(workdir):
+            logger.error(workdir + "Doesn't exists, probably initialisation failed")
+            raise ValueError(workdir + "Doesn't exists, probably initialisation failed")
+
+        if not os.path.isfile(os.path.join(workdir, "build.sbt")):
+            msg = "build.sbt Doesn't exists, EXA_HOME isn't set correctly call may have failed"
+            logger.error(msg)
+            raise ValueError(msg)
 
         self.workdir = workdir
 
