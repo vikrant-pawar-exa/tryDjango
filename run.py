@@ -16,6 +16,7 @@ else:
   app.config.from_object(DevelopmentConfig)
   logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
 
+
 @app.before_request
 def verify_access_token():
   try:
@@ -39,6 +40,7 @@ def verify_access_token():
   except Exception as e:
     logging.error("----Exception in OKTA API : {}".format(sys.exc_info()[1]))
     return make_resp({"message":"Exception in API: {}".format(sys.exc_info()[1])}, 422)
+
 
 default_api_url = "/api"
 api = Api(app)

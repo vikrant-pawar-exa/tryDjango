@@ -1,9 +1,9 @@
 class Config(object):
     DEBUG = False
     TESTING = False
-    USERNAME_GIT = ""
-    PASSWORD_GIT = ""
-    HOST_GIT = "exabeam.atlassian.net"
+    USERNAME_JIRA = ""
+    PASSWORD_JIRA = ""
+    HOST_JIRA = ""
 
 
 class ProductionConfig(Config):

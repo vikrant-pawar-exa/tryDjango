@@ -15,8 +15,10 @@ def index():
   return make_resp({"message":"api working"})
 
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
-api.add_resource(TicketUnresolved, '/tickets/unresolve_ticket')
-api.add_resource(Ticket, '/tickets', endpoint="tickets")
-api.add_resource(Comments, '/comments/<issueIdOrKey>')
-api.add_resource(UpdateComments, '/comments/<issueIdOrKey>/<commentId>',methods=['PUT'])
-api.add_resource(Attachment, '/attach/<issueIdOrKey>', methods=['POST'])
+api.add_resource(TicketUnresolved, '/ticket/unresolve_ticket')
+api.add_resource(Ticket, '/ticket')
+api.add_resource(Comments, '/ticket/<issueIdOrKey>/comments')
+api.add_resource(UpdateComments, '/ticket/<issueIdOrKey>/comments/<commentId>',methods=['PUT'])
+api.add_resource(Transition, '/ticket/<issueIdOrKey>/transition', methods=['POST', 'GET'])
+api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
+
