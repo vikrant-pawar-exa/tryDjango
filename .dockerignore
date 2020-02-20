@@ -1,4 +1,4 @@
 # ignore following files
 venv
-log
+**/*.log
 ca_image*

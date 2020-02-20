@@ -53,13 +53,9 @@ class SBT():
         self.workdir = workdir
 
     def run_test(self):
-        p = subprocess.Popen(["date"], stdout=subprocess.PIPE, shell=True)
-        (output, err) = p.communicate()
-        print("Output")
-        print(str(output))
+        output = subprocess.run("cd "+self.workdir + "; sbt test")
+        err = "--"
 
-        p = subprocess.Popen(["cd " + self.workdir + " ;sbt", "test"], stdout=subprocess.PIPE, shell=True)
-        (output, err) = p.communicate()
         # p = subprocess.Popen(["ls", "-ltrs"], stdout=subprocess.PIPE, shell=True)
         # (output, err) = p.communicate()
 
