@@ -4,6 +4,7 @@ class Config(object):
     USERNAME_GIT = ""
     PASSWORD_GIT = ""
     HOST_GIT = "exabeam.atlassian.net"
+    EXA_SECURITY = ""
 
 
 class ProductionConfig(Config):
