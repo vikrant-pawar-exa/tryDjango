@@ -2,12 +2,14 @@ class Config(object):
     DEBUG = False
     TESTING = False
 
+
 class ProductionConfig(Config):
-    DATABASE_URI = 'mongo://user@localhost/foo'
+    DB_HOST = 'mongo://user@localhost/foo'
 
 class DevelopmentConfig(Config):
     DEBUG = True
-
+    DB_HOST = 'mongo://localhost:27017'
 
 class StagingConfig(Config):
     TESTING = True
+    DB_HOST = 'mongo://user@localhost/foo'
