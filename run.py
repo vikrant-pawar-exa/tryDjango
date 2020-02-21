@@ -4,7 +4,7 @@ import sys
 
 from flask import Flask, request
 from flask_restful import Api
-from Flask-cors import CORS
+from flask_cors import CORS
 
 from app.api.api import main_api_blueprint
 from app.utils.custom_response import make_resp
@@ -21,7 +21,6 @@ if app.config["ENV"] == "production":
 else:
   app.config.from_object(DevelopmentConfig)
   logging.basicConfig(filename='log/development.log',level=logging.DEBUG)
-
 
 @app.before_request
 def verify_access_token():
