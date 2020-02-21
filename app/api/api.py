@@ -1,13 +1,10 @@
-from flask import Blueprint, request, jsonify
 from flask import Blueprint
-from app.utils.custom_response import make_resp
-from flask_restful import reqparse, abort, Api, Resource
+from flask_restful import Api
 
 from app.api.external.jira import *
+from app.api.user import *
 from app.api.user_profiles import *
 from app.test_cases.sbt import sbt_resource
-from app.api.user import *
-
 
 main_api_blueprint = Blueprint('main_api_blueprint', __name__)
 
