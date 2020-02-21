@@ -6,7 +6,7 @@ import subprocess
 from random import randint
 
 from ansi2html import Ansi2HTMLConverter
-from flask import send_file
+from flask import send_file, request
 from flask_restful import Resource
 
 from config import Config
@@ -17,11 +17,23 @@ logger = logging.getLogger(__name__)
 class sbt_resource(Resource):
 
     def get(self, ticket_id):
+        """
+        Get File by name with status
+        :param ticket_id:
+        :return:
+        """
         try:
+            need_html = request.args.get('htmlPage', default="False", type=str)
             my_sbt = SBT()
-            out = my_sbt.get_html_sbt()
-            logger.debug("Output --- Got Output Request " + out)
-            return send_file(out)
+            if need_html != "False":
+                out = my_sbt.get_html_sbt(need_html)
+                logger.debug("Output --- Got Output Request " + out)
+                return send_file(out)
+            else:
+                tmp_file, success = my_sbt.run_sbt_file()
+                sbt_resp = {"SBT_Result": success , "File": tmp_file}
+                logger.debug(" Got SBT output as %s, with file %s, for ticket %s", success, tmp_file, ticket_id)
+                return sbt_resp, 200
 
         except ValueError as v:
             print("Value Error")
@@ -46,8 +58,8 @@ class SBT:
 
         self.workdir = workdir
 
-    def get_html_sbt(self):
-        tmp_file = self.run_sbt_file()
+    def get_html_sbt(self, tmp_file):
+
         conv = Ansi2HTMLConverter()
 
         with open(tmp_file) as f:
@@ -62,6 +74,12 @@ class SBT:
         return tmp_file + '.html'
 
     def run_sbt_file(self):
+        """
+        Run Sbt too
+        :return:
+        tmp_file : tmp File with SBT output
+        sucess : True / False
+        """
         sbt_path = "sbt"
         logger.info("Running command %s test and %s", sbt_path, self.workdir)
         n = 10
@@ -70,7 +88,7 @@ class SBT:
         with open(tmp_file, "w") as file:
             output = subprocess.run([sbt_path, "test"], stdout=file, cwd=self.workdir)
 
-        logger.debug("sbt command executed %s", output)
+        logger.debug("sbt command executed %s , %s", output, bool(output.returncode))
         logger.debug("sbt output is stored at  %s ", tmp_file)
 
-        return tmp_file
+        return tmp_file, bool(output.returncode)

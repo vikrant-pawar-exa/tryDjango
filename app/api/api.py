@@ -16,12 +16,16 @@ def index():
 
 
 api.add_resource(OktaUserInfo, '/users/user_info')
+
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
+# api.add_resource(sbt_resource, '/sbt/<ticket_id>/getFile')
+
 api.add_resource(TicketUnresolved, '/ticket/unresolve_ticket')
 api.add_resource(Ticket, '/ticket')
 api.add_resource(Comments, '/ticket/<issueIdOrKey>/comments')
 api.add_resource(UpdateComments, '/ticket/<issueIdOrKey>/comments/<commentId>',methods=['PUT'])
 api.add_resource(Transition, '/ticket/<issueIdOrKey>/transition', methods=['POST', 'GET'])
 api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
+
 api.add_resource(UserProfile, '/users', methods=['POST', 'GET'])
 
