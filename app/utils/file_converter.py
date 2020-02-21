@@ -65,7 +65,7 @@ class  Triage:
         if not log_file_name == None:
             os.system(Config.MAKE_SPLUNKCSV_SCRIPT +" "+ log_file_name)
             os.rename('formated_sample.log.gz', '00.Splunk.mixed.log.gz')
-            logging.info(Successfully generated GZ file)
+            logging.info('Successfully generated GZ file')
             return make_resp({"message":"Successfully generated GZ file"}, 200)
         else:
             logging.info("Insuficient data: No suitable file found")
