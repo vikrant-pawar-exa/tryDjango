@@ -13,7 +13,8 @@ api = Api(main_api_blueprint)
 
 @main_api_blueprint.route('/')
 def index():
-  return make_resp({"message":"api working"})
+  return make_resp({"message":"Api working -: This is exceptional routes that don't required token"})
+
 
 api.add_resource(OktaUserInfo, '/users/user_info')
 api.add_resource(sbt_resource, '/sbt/<ticket_id>')
