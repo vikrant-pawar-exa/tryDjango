@@ -11,9 +11,9 @@ import logging
 from config import Config, ProductionConfig, DevelopmentConfig
 
 from app.api.api import main_api_blueprint
-from app.api.auth import auth_bp
 from app.utils.custom_response import make_resp
 from app.utils.user import verify_okta_token
+from app.utils.constant import Constants
 from config import ProductionConfig, DevelopmentConfig
 
 app = Flask("CA_backend")
@@ -29,15 +29,14 @@ else:
 
 @app.before_request
 def verify_access_token():
-  return verify_okta_token(request.headers)
-
+  if request.path not in Constants.ROUTES_WITHOUT_TOKEN:
+    return verify_okta_token(request.headers)
 
 
 default_api_url = "/api"
 api = Api(app)
 
 app.register_blueprint(main_api_blueprint, url_prefix=default_api_url)
-app.register_blueprint(auth_bp, url_prefix=default_api_url)
 
 
 @app.errorhandler(404)
