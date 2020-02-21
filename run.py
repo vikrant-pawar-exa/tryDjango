@@ -1,6 +1,8 @@
+import logging
+import requests
+import sys
+
 from flask import Flask, request
-from config import Config, ProductionConfig, DevelopmentConfig
-import logging, requests, sys
 from flask_restful import Api
 from flask_cors import CORS
 
@@ -8,6 +10,7 @@ from app.api.api import main_api_blueprint
 from app.utils.custom_response import make_resp
 from app.utils.user import verify_okta_token
 from app.utils.constant import Constants
+from config import ProductionConfig, DevelopmentConfig
 
 app = Flask("CA_backend")
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
