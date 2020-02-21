@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+
+    flask:
+        build: .
+        container_name: flask
+        restart: always
+        ports:
+            - "5000:5000"
+        links:
+            - db
+    
+    db:
+        image: mongo:3.0.2
+        expose:
+            - 27017
+
+
+
+            

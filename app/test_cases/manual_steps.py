@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from flask_restful import Resource
-from app.utils.lime_file_converter import LimeConverter
+from app.utils.file_converter import Triage
 
 class Lime(Resource):
 
@@ -10,4 +10,4 @@ class Lime(Resource):
                return make_resp({'message': 'No input data provided'}, 400)
         ticket_number = json_data["ticketNumber"]
         log_file_path = json_data["logFilePath"]
-        return LimeConverter().lime_setup(ticket_number, log_file_path)
+        return Triage().lime_setup(ticket_number, log_file_path)
