@@ -1,7 +1,7 @@
 import json
 import sys, logging
 import requests
-from flask import request
+from flask import request, jsonify, abort
 from flask_restful import Resource
 from requests.auth import HTTPBasicAuth
 from werkzeug.exceptions import BadRequest
@@ -24,7 +24,7 @@ class TicketUnresolved(Resource):
         """
         try:
             logging.info('Enter in get TicketUnresolved JIRA api')
-            assigneeEmail = request.headers.get('email', '')
+            assigneeEmail = request.args.get('assignee', default='',type=str)
             if assigneeEmail == '':
                 raise BadRequest()
             url = SCHEME + Config.HOST_JIRA + Constants.UNRESOLVED_TICKET_URL.format(assigneeEmail)
@@ -40,7 +40,7 @@ class TicketUnresolved(Resource):
             logging.error("----Exception in JIRA TicketUnresolved API : {}".format(sys.exc_info()[1]))
             return make_resp({"message": "Exception in API: {}".format(sys.exc_info()[1])}, 422)
         logging.info("Exit from TicketUnresolved ")
-        return parse_response(response)
+        return parse_response(response, '/ticket/unresolve_ticket')
 
 
 class Ticket(Resource):
@@ -52,7 +52,7 @@ class Ticket(Resource):
         logging.info('Enter in get Ticket JIRA api')
         try:
             maxResults = request.args.get('maxResults', default=50, type=str)
-            assigneeEmail = request.headers.get('email', '')
+            assigneeEmail = request.args.get('assignee', default='', type=str)
             if assigneeEmail == '':
                 raise BadRequest()
             url = SCHEME + Config.HOST_JIRA+ Constants.GET_TICKET_URL.format(assigneeEmail, maxResults)
@@ -69,7 +69,7 @@ class Ticket(Resource):
             logging.error("----Exception in JIRA Ticket API : {}".format(sys.exc_info()[1]))
             return make_resp({"message": "Exception in API: {}".format(sys.exc_info()[1])}, 422)
         logging.info("Exit from Ticket ")
-        return parse_response(response)
+        return parse_response(response, '/ticket')
 
 
 class Comments(Resource):
@@ -212,7 +212,7 @@ class Attachment(Resource):
             return handle_response(response)
 
 
-def parse_response(response):
+def parse_response(response,url):
     """
       Parse the response in appropriate format
       :return: json response
@@ -243,12 +243,51 @@ def parse_response(response):
             else:
                 return make_resp({"message": "Exception in API:Parsing error Custom_feild for"
                                              " Salesforce Customer not found"}, 422)
-            return {'issue': content}, 200
+            return jsonify(get_paginated_list(
+                content,
+                url,
+                start=request.args.get('start', 1),
+                limit=request.args.get('limit', 20)
+            ))
         else:
             return handle_response(response)
     except:
         logging.error("----Exception in JIRA parse_response API ")
         return make_resp({"message": "Exception in API: Parsing error"}, 422)
+
+
+def get_paginated_list(results, url, start, limit):
+    """
+    Get Paginated list
+    :return: json object
+    """
+    logging.info('Enter in parse_response JIRA api')
+    try:
+        start = int(start)
+        limit = int(limit)
+        count = len(results)
+        if count < start or limit < 0:
+            abort(404)
+        obj = {}
+        obj['start'] = start
+        obj['limit'] = limit
+        obj['count'] = count
+        if start == 1:
+            obj['previous'] = ''
+        else:
+            start_copy = max(1, start - limit)
+            limit_copy = start - 1
+            obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+        if start + limit > count:
+            obj['next'] = ''
+        else:
+            start_copy = start + limit
+            obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+        obj['results'] = results[(start - 1):(start - 1 + limit)]
+        return obj
+    except:
+        logging.error("----Exception in get_paginated_list API ")
+        return make_resp({"message": "Exception in API: Pagination error"}, 422)
 
 
 def handle_response(response):

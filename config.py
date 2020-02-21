@@ -4,6 +4,7 @@ class Config(object):
     USERNAME_JIRA = ""
     PASSWORD_JIRA = ""
     HOST_JIRA = "exabeam.atlassian.net"
+
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
     EXA_SECURITY = ""
 
