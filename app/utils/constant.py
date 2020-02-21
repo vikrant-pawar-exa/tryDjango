@@ -6,3 +6,4 @@ class Constants(object):
     UPDATE_COMMENT_URL = "/rest/api/2/issue/{}/comment/{}"
     ADD_ATTACHMENT_URL = "/rest/api/2/issue/{}/attachments"
     GET_STATUS_URL = "/rest/api/2/issue/{}/transitions"
+    ROUTES_WITHOUT_TOKEN = ["/api/"]
