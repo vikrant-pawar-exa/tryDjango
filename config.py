@@ -1,9 +1,11 @@
 class Config(object):
     DEBUG = False
     TESTING = False
-    USERNAME_GIT = ""
-    PASSWORD_GIT = ""
-    HOST_GIT = "exabeam.atlassian.net"
+    USERNAME_JIRA = ""
+    PASSWORD_JIRA = ""
+    HOST_JIRA = "exabeam.atlassian.net"
+    OKTA_HOST_URL = 'https://dev-780755.okta.com'
+    EXA_SECURITY = ""
 
 
 
@@ -13,6 +15,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     DB_HOST = 'mongo://localhost:27017'
+    TESTING = True
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
 
 class DevelopmentConfig(Config):
@@ -22,3 +25,4 @@ class DevelopmentConfig(Config):
 class StagingConfig(Config):
     TESTING = True
     DB_HOST = 'mongo://user@localhost/foo'
+

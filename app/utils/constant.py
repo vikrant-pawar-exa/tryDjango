@@ -7,3 +7,5 @@ class Constants(object):
     ADD_ATTACHMENT_URL = "/rest/api/2/issue/{}/attachments"
     PASSWORD = "secret_for_conversion"
     SALT = b'\xc0\xf9\xb3\xe8\x82.\xdb\xf8\xd4\xb2f\xfa\xbbs\xdf\x0c'
+    GET_STATUS_URL = "/rest/api/2/issue/{}/transitions"
+
