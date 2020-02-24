@@ -264,26 +264,28 @@ def parse_response(response,url):
                 for name, sf_custom_field in names.items():
                     if sf_custom_field == 'Salesforce Customer':
                         custom_field_for_sf = name
-            if custom_field_for_sf != None:
-                for issue in issues:
-                    dict = {
-                        "id": issue['key'],
-                        "assignee": issue['fields']['assignee']['displayName'],
-                        "priority": issue['fields']['priority']['name'],
-                        "status": issue['fields']['status']['name'],
-                        "summary": issue['fields']['summary'],
-                        "Salesforce Customer": issue['fields'][custom_field_for_sf]
-                    }
-                    content.append(dict)
+                if custom_field_for_sf != None:
+                    for issue in issues:
+                        dict = {
+                            "id": issue['key'],
+                            "assignee": issue['fields']['assignee']['displayName'],
+                            "priority": issue['fields']['priority']['name'],
+                            "status": issue['fields']['status']['name'],
+                            "summary": issue['fields']['summary'],
+                            "Salesforce Customer": issue['fields'][custom_field_for_sf]
+                        }
+                        content.append(dict)
+                else:
+                    return make_resp({"message": "Exception in API:Parsing error Custom_feild for"
+                                                 " Salesforce Customer not found"}, 422)
+                return jsonify(get_paginated_list(
+                    content,
+                    url,
+                    start=request.args.get('start', 1),
+                    limit=request.args.get('limit', 20)
+                ))
             else:
-                return make_resp({"message": "Exception in API:Parsing error Custom_feild for"
-                                             " Salesforce Customer not found"}, 422)
-            return jsonify(get_paginated_list(
-                content,
-                url,
-                start=request.args.get('start', 1),
-                limit=request.args.get('limit', 20)
-            ))
+                return {"results": content}
         else:
             return handle_response(response)
     except:
