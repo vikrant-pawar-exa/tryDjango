@@ -13,6 +13,8 @@ from app.models.jira_ticket_status import Ticket_history
 from app.utils.user import okta_user_info
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
+
 
 SCHEME = "http://"
 
@@ -24,9 +26,9 @@ def getToken():
         response_json = json.loads(resp_info.text)
         user_info = Users.get_user(response_json['email'])
         global jira_username
-        jira_username = user_info["jira_username"]#"akshaypange738"#"akshay.pange@exabeam.com"  # user_info["jira_username"]
+        jira_username = user_info["jira_username"]
         global jira_token
-        jira_token = user_info["jira_token"]#"Aniket@738"#"08wmmbS7IVY6n9f1pUGiAB04"  # user_info["jira_token"]
+        jira_token = user_info["jira_token"]
     except:
         logging.error("----Exception in JIRA TicketUnresolved API : {}".format(sys.exc_info()[1]))
         return make_resp({"message": "Exception in getToken API: {}".format(sys.exc_info()[1])}, 422)
