@@ -1,4 +1,4 @@
-import os, re, logging
+import os, re, logging, subprocess
 from fnmatch import fnmatch
 from distutils.dir_util import copy_tree
 from zipfile import ZipFile
@@ -15,7 +15,8 @@ class  Triage:
         sample_file = "sample.log"
         if file.endswith(".csv"):
             logging.info(f'found csv file: {file}')
-            os.system("python " + Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file)
+            subprocess.check_output("python " + Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file);
+            #os.system("python " + Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file)
             return sample_file
         elif file.endswith(".log"):
             logging.info(f'found log file: {file}')
@@ -56,16 +57,19 @@ class  Triage:
 
         if log_file.endswith(".zip"):
             return self.unzip_zip(log_file)
-        
-        log_file_name = self.csv_to_log(log_file)
-        if not log_file_name == None:
-            os.system(Config.MAKE_SPLUNKCSV_SCRIPT +" "+ log_file_name)
-            os.rename(Constants.FORMATED_SAMPLE_FILE, Constants.SPLUNK_MIXED_LOG_FILE)
-            logging.info('Successfully generated GZ file')
-            return make_resp({"message":"Successfully generated GZ file"}, 200)
-        else:
-            logging.info("Insuficient data: No suitable file found")
-            return make_resp({"message":"Insuficient data"}, 400)
+        try:
+            log_file_name = self.csv_to_log(log_file)
+            if not log_file_name == None:
+                subprocess.check_output(Config.MAKE_SPLUNKCSV_SCRIPT, log_file_name)
+                os.rename(Constants.FORMATED_SAMPLE_FILE, Constants.SPLUNK_MIXED_LOG_FILE)
+                logging.info('Successfully generated GZ file')
+                return make_resp({"message":"Successfully generated GZ file"}, 200)
+            else:
+                logging.error("Insuficient data: No suitable file found")
+                return make_resp({"message":"Insuficient data"}, 400)
+        except subprocess.CalledProcessError as cp:
+            logging.error(f"Failed to convert file to log.gz file \n error: {cp}")
+            return make_resp({"message":"Failed to convert file to log.gz file"}, 500)
 
 
     def fetch_log_file(self, work_dir):
@@ -90,7 +94,14 @@ class  Triage:
         if not os.path.exists(ticket_path):
             logging.error(f"Ticket path {ticket_path} doesn't exist")
             return make_resp({"message":"Internal server error"}, 500)
-        copy_tree(ticket_path, work_dir)
+        
+        try:
+            copy_tree(ticket_path, work_dir)
+            logging.info(f"Successfully copied content of {ticket_path} to {work_dir}")
+        except DistutilsFileError as er:
+            logging.error(f"{ticket_path} is not Directory ")
+            return make_resp({"message":f"{ticket_path} is not Directory "}, 404)
+
         os.chdir(work_dir)
         #To fetch all log files
         return self.fetch_log_file(work_dir)
