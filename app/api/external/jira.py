@@ -8,9 +8,29 @@ from werkzeug.exceptions import BadRequest
 from app.utils.constant import Constants
 from config import Config
 from app.utils.custom_response import make_resp
+from app.models.users import Users
+from app.models.jira_ticket_status import Ticket_history
+from app.utils.user import okta_user_info
+from datetime import datetime
 
 
 SCHEME = "http://"
+
+
+def getToken():
+    logging.info('Enter in getToken')
+    try:
+        resp_info = okta_user_info(request.headers.get('api-accessToken'))
+        response_json = json.loads(resp_info.text)
+        user_info = Users.get_user(response_json['email'])
+        global jira_username
+        jira_username = user_info["jira_username"]#"akshaypange738"#"akshay.pange@exabeam.com"  # user_info["jira_username"]
+        global jira_token
+        jira_token = user_info["jira_token"]#"Aniket@738"#"08wmmbS7IVY6n9f1pUGiAB04"  # user_info["jira_token"]
+    except:
+        logging.error("----Exception in JIRA TicketUnresolved API : {}".format(sys.exc_info()[1]))
+        return make_resp({"message": "Exception in getToken API: {}".format(sys.exc_info()[1])}, 422)
+    logging.info('Exit from getToken ')
 
 
 class TicketUnresolved(Resource):
@@ -22,17 +42,18 @@ class TicketUnresolved(Resource):
         Get unresolved issue assigned to user
         :return: json response
         """
+        logging.info('Enter in get TicketUnresolved JIRA api{}')
         try:
-            logging.info('Enter in get TicketUnresolved JIRA api')
-            assigneeEmail = request.args.get('assignee', default='',type=str)
+            getToken()
+            assigneeEmail = request.args.get('assignee', default='', type=str)
             if assigneeEmail == '':
                 raise BadRequest()
             url = SCHEME + Config.HOST_JIRA + Constants.UNRESOLVED_TICKET_URL.format(assigneeEmail)
             headers = {
                 "Accept": "application/json",
             }
-            response = requests.request("GET", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                       Config.PASSWORD_JIRA), headers=headers)
+            response = requests.request("GET", url, auth=HTTPBasicAuth(jira_username,
+                                                                       jira_token), headers=headers)
         except BadRequest:
             logging.error("----Exception email/name of assignee not be null : {}".format(sys.exc_info()[1]))
             return make_resp({"message": "Please provide valid details(email/name) of assignee"}, 400)
@@ -51,6 +72,7 @@ class Ticket(Resource):
          """
         logging.info('Enter in get Ticket JIRA api')
         try:
+            getToken()
             maxResults = request.args.get('maxResults', default=50, type=str)
             assigneeEmail = request.args.get('assignee', default='', type=str)
             if assigneeEmail == '':
@@ -59,8 +81,8 @@ class Ticket(Resource):
             headers = {
                 "Accept": "application/json",
             }
-            response = requests.request("GET", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                       Config.PASSWORD_JIRA), headers=headers)
+            response = requests.request("GET", url, auth=HTTPBasicAuth(jira_username,
+                                                                       jira_token), headers=headers)
         except BadRequest:
             logging.error("----Exception email/name of assignee not be null : {}".format(sys.exc_info()[1]))
             return make_resp({"message": "Please provide valid details(email/name) of assignee"}, 400)
@@ -83,13 +105,14 @@ class Comments(Resource):
         """
         logging.info('Enter in get Comments JIRA api')
         try:
+            getToken()
             url = SCHEME + Config.HOST_JIRA + Constants.GET_COMMENTS_URL.format(issueIdOrKey)
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             }
-            response = requests.request("GET", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                       Config.PASSWORD_JIRA), headers=headers)
+            response = requests.request("GET", url, auth=HTTPBasicAuth(jira_username,
+                                                                       jira_token), headers=headers)
             if response.status_code == 200 or response.status_code == 201:
                 return response.json(), 200
             else:
@@ -105,13 +128,14 @@ class Comments(Resource):
         """
         logging.info('Enter in post Comments JIRA api')
         try:
+            getToken()
             url = SCHEME + Config.HOST_JIRA + Constants.GET_COMMENTS_URL.format(issueIdOrKey)
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             }
-            response = requests.request("POST", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                        Config.PASSWORD_JIRA), headers=headers,
+            response = requests.request("POST", url, auth=HTTPBasicAuth(jira_username,
+                                                                        jira_token), headers=headers,
                                         data=request.data)
             if response.status_code == 201 or response.status_code == 200:
                 return response.json(), 200
@@ -129,15 +153,16 @@ class UpdateComments(Resource):
           Update comments for particular issue
           :return: json response
         """
+        logging.info('Enter in UpdateComments JIRA api')
         try:
-            logging.info('Enter in UpdateComments JIRA api')
+            getToken()
             url = SCHEME + Config.HOST_JIRA + Constants.UPDATE_COMMENT_URL.format(issueIdOrKey, commentId)
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             }
-            response = requests.request("PUT", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                       Config.PASSWORD_JIRA), headers=headers,
+            response = requests.request("PUT", url, auth=HTTPBasicAuth(jira_username,
+                                                                       jira_token), headers=headers,
                                         data=request.data)
             if response.status_code == 200:
                 return response.json(), 200
@@ -156,6 +181,7 @@ class Transition(Resource):
         """
         logging.info('Enter in Transition JIRA api')
         try:
+            getToken()
             status = request.args.get('status', '')
             print(status)
             if status == '':
@@ -166,8 +192,8 @@ class Transition(Resource):
 
                 "Content-Type": "application/json"
             }
-            response = requests.request("GET", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                       Config.PASSWORD_JIRA), headers=headers)
+            response = requests.request("GET", url, auth=HTTPBasicAuth(jira_username,
+                                                                       jira_token), headers=headers)
             if response.status_code == 200:
                 response_json = json.loads(response.text)
                 transitions = response_json['transitions']
@@ -175,11 +201,18 @@ class Transition(Resource):
                     if str(transition["name"]) == str(status):
                         transition_id = transition['id']
                         data = {"transition": {"id": transition_id}}
-                        post_response = requests.request("POST", url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                                                         Config.PASSWORD_JIRA), headers=headers,
+                        post_response = requests.request("POST", url, auth=HTTPBasicAuth(jira_username,
+                                                                                         jira_token), headers=headers,
                                                          data=json.dumps(data))
                         if post_response.status_code == 204:
-                            return make_resp({"message": "Status successfully updated"}, 200)
+                            ticket_status= {
+                                "jira_ticket": issueIdOrKey,
+                                "user": jira_username,
+                                "date_time": datetime.now(),
+                                "status": status
+                            }
+                            Ticket_history.add_status(ticket_status)
+                            return make_resp({"success": "Status successfully updated"}, 200)
                         else:
                             handle_response(post_response)
                 return make_resp({"message": "transition not possible"}, 500)
@@ -204,8 +237,8 @@ class Attachment(Resource):
                 "Content-Type": "multipart/form-data",
                 "X - Atlassian - Token": "nocheck"
             }
-            response = requests.post(url, auth=HTTPBasicAuth(Config.USERNAME_JIRA,
-                                                             Config.PASSWORD_JIRA), headers=headers, files=request.files)
+            response = requests.post(url, auth=HTTPBasicAuth(jira_username,
+                                                             jira_token), headers=headers, files=request.files)
         if response.status_code == 200:
             return response.json(), 200
         else:

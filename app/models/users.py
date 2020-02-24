@@ -3,7 +3,7 @@ from app.utils.token_conversion import TokenConversion
 import logging
 
 class Users:
-	def get_users():
+	def get_users(self):
 		all_users = client.user_profiles.find()
 		return all_users
 
