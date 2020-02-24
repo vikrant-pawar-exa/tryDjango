@@ -9,7 +9,7 @@ from app.api.user_profiles import *
 from app.test_cases.sbt import sbt_resource
 from app.api.user import *
 
-from app.test_cases.manual_steps import Lime
+from app.test_cases.manual_steps import *
 
 main_api_blueprint = Blueprint('main_api_blueprint', __name__)
 
@@ -31,4 +31,6 @@ api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
 api.add_resource(UserProfile, '/users', methods=['POST', 'GET'])
 
 #Lime api
-api.add_resource(Lime, '/lime/setup', methods=['POST'])
+api.add_resource(LimePreConvertion, '/lime/setup', methods=['POST'])
+api.add_resource(FetchFile, '/lime/get_log_files/<ticket_id>')
+

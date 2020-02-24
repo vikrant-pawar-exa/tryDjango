@@ -10,3 +10,6 @@ class Constants(object):
     GET_STATUS_URL = "/rest/api/2/issue/{}/transitions"
     ROUTES_WITHOUT_TOKEN = ["/api/"]
 
+    FORMATED_SAMPLE_FILE = 'formated_sample.log.gz'
+    SPLUNK_MIXED_LOG_FILE = '00.Splunk.mixed.log.gz'
+
