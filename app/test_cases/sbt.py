@@ -6,39 +6,37 @@ import subprocess
 from random import randint
 
 from ansi2html import Ansi2HTMLConverter
-from flask import send_file, request
-from flask_restful import Resource
 
 from config import Config
 
 logger = logging.getLogger(__name__)
 
 
-class sbt_resource(Resource):
-
-    def get(self, ticket_id):
-        """
-        Get File by name with status
-        :param ticket_id:
-        :return:
-        """
-        try:
-            need_html = request.args.get('htmlPage', default="False", type=str)
-            my_sbt = SBT()
-            if need_html != "False":
-                out = my_sbt.get_html_sbt(need_html)
-                logger.debug("Output --- Got Output Request " + out)
-                return send_file(out)
-            else:
-                tmp_file, success = my_sbt.run_sbt_file()
-                sbt_resp = {"SBT_Result": success , "File": tmp_file}
-                logger.debug(" Got SBT output as %s, with file %s, for ticket %s", success, tmp_file, ticket_id)
-                return sbt_resp, 200
-
-        except ValueError as v:
-            print("Value Error")
-            return "Error" + str(v), 500
-
+# class sbt_resource(Resource):
+#
+#     def get(self, ticket_id):
+#         """
+#         Get File by name with status
+#         :param ticket_id:
+#         :return:
+#         """
+#         try:
+#             need_html = request.args.get('htmlPage', default="False", type=str)
+#             my_sbt = SBT()
+#             if need_html != "False":
+#                 out = my_sbt.get_html_sbt(need_html)
+#                 logger.debug("Output --- Got Output Request " + out)
+#                 return send_file(out)
+#             else:
+#                 tmp_file, success = my_sbt.run_sbt_file()
+#                 sbt_resp = {"SBT_Result": success , "File": tmp_file}
+#                 logger.debug(" Got SBT output as %s, with file %s, for ticket %s", success, tmp_file, ticket_id)
+#                 return sbt_resp, 200
+#
+#         except ValueError as v:
+#             print("Value Error")
+#             return "Error" + str(v), 500
+#
 
 class SBT:
     """
@@ -48,8 +46,8 @@ class SBT:
     def __init__(self, workdir=Config.EXA_SECURITY):
         logger.info("Using workdir %s", workdir)
         if not os.path.isdir(workdir):
-            logger.error(workdir + "Doesn't exists, probably initialisation failed")
-            raise ValueError(workdir + "Doesn't exists, probably initialisation failed")
+            logger.error(workdir + " Doesn't exists, probably initialisation failed")
+            raise ValueError(workdir + " Doesn't exists, probably initialisation failed")
 
         if not os.path.isfile(os.path.join(workdir, "build.sbt")):
             msg = "build.sbt Doesn't exists, EXA_HOME isn't set correctly call may have failed"

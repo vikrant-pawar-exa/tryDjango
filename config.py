@@ -18,10 +18,10 @@ class DevelopmentConfig(Config):
     DB_HOST = 'mongo://localhost:27017'
     TESTING = True
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-    OKTA_HOST_URL = 'https://dev-780755.okta.com'
+# Removing duplicated
+# class DevelopmentConfig(Config):
+#     DEBUG = True
+#     OKTA_HOST_URL = 'https://dev-780755.okta.com'
 
 class StagingConfig(Config):
     TESTING = True
