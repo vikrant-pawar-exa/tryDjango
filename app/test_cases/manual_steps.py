@@ -21,6 +21,6 @@ class FetchFile(Resource):
         try:
             return Triage().get_log_files(ticket_id)
         except:
-            logging.error("----Exception in JIRA TicketUnresolved API : {}".format(sys.exc_info()[1]))
+            logging.error("----Exception in Fetch file API : {}".format(sys.exc_info()[1]))
             return make_resp({"message": "Exception in API: {}".format(sys.exc_info()[1])}, 422)
         
