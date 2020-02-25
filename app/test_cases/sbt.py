@@ -91,4 +91,7 @@ class SBT:
         logger.debug("sbt command executed %s , %s", output, bool(output.returncode))
         logger.debug("sbt output is stored at  %s ", tmp_file)
 
-        return tmp_file, bool(output.returncode)
+        chk_op = subprocess.run(["grep" , "All tests passed" , tmp_file ], cwd=self.workdir)
+        print (chk_op.check_returncode) 
+
+        return tmp_file, bool(output.returncode == 0)
