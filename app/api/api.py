@@ -3,7 +3,6 @@ from flask_restful import Api
 from app.api.external.jira import *
 from app.api.testcase import test_case
 from app.api.user import *
-from app.test_cases.manual_steps import *
 from app.api.user_profiles import *
 
 main_api_blueprint = Blueprint('main_api_blueprint', __name__)

@@ -60,7 +60,7 @@ class  Triage:
         
         if not os.path.exists(work_dir + log_file):
             logging.error(f"Log file  {log_file} doesn't exist")
-            return make_resp({"message":"Log file  {log_file} doesn't exist"}, 404)
+            return make_resp({"message":f"Log file  {log_file} doesn't exist"}, 404)
         os.chdir(work_dir)
 
         try:
