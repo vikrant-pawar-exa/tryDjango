@@ -1,3 +1,5 @@
+from config import Config
+
 class Constants(object):
     UNRESOLVED_TICKET_URL = "/rest/api/3/search?expand=names&maxResults=50&" \
                             "jql=assignee%3D%22{}%22 %26 status not in (Resolved,Closed)"
@@ -10,3 +12,7 @@ class Constants(object):
     GET_STATUS_URL = "/rest/api/2/issue/{}/transitions"
     ROUTES_WITHOUT_TOKEN = ["/api/"]
 
+    GIT = {
+      "REPO_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"],
+      "PULL_REQUEST_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"]+"/pulls"
+    }

@@ -4,11 +4,14 @@ class Config(object):
     USERNAME_JIRA = ""
     PASSWORD_JIRA = ""
     HOST_JIRA = "exabeam.atlassian.net"
-
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
     EXA_SECURITY = ""
-
-
+    GIT = {
+      "HOST": "https://api.github.com",
+      "OWNER": "Test-GS-Lab", # "Exabeam"
+      "REPO": "testing-org-repo", # "exa_security"
+      "DEST_REPO_DIR": "git_repo"
+    }
 
 class ProductionConfig(Config):
     DB_HOST = 'mongo://user@localhost/foo'
