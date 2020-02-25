@@ -24,6 +24,7 @@ def verify_okta_token(req_headers):
     logging.error("----Exception in OKTA API : {}".format(sys.exc_info()[1]))
     return make_resp({"message":"Exception in API: {}".format(sys.exc_info()[1])}, 422)
 
+
 def okta_user_info(api_token):
   try:
     okta_userinfo_url = "{}/oauth2/default/v1/userinfo".format(Config.OKTA_HOST_URL)

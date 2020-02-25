@@ -32,6 +32,7 @@ else:
         ], level=logging.DEBUG)
 
 
+
 @app.before_request
 def verify_access_token():
     if request.path not in Constants.ROUTES_WITHOUT_TOKEN:
