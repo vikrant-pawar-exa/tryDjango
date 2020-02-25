@@ -63,8 +63,6 @@ class  Triage:
             return make_resp({"message":"Log file  {log_file} doesn't exist"}, 404)
         os.chdir(work_dir)
 
-        if log_file.endswith(".zip"):
-            return self.unzip_zip(log_file)
         try:
             log_file_name = self.csv_to_log(log_file)
             if not log_file_name == None:
@@ -92,16 +90,16 @@ class  Triage:
         logging.info(files)
         return files
 
-    def get_log_files(self, ticket_id):
+    def get_log_files(self, ticket_id, subdirectory):
         logging.info("Getting log files for "+ ticket_id)
         work_dir = Config.WORK_DIR
         ticket_path = Config.TICKETS_DIR_PATH +  ticket_id + "/"
-        work_dir = work_dir + datetime.today().strftime('%Y-%m-%d')
+        work_dir = work_dir + datetime.today().strftime('%Y-%m-%d') + "/"
         logging.info(f'working directory: {work_dir}')
     
         if not os.path.exists(ticket_path):
             logging.error(f"Ticket path {ticket_path} doesn't exist")
-            return make_resp({"message":"Internal server error"}, 500)
+            return make_resp({"message":f"Ticket path {ticket_path} doesn't exist"}, 500)
         
         try:
             copy_tree(ticket_path, work_dir)
@@ -111,6 +109,17 @@ class  Triage:
             return make_resp({"message":f"{ticket_path} is not Directory "}, 404)
 
         os.chdir(work_dir)
+        
+        if not subdirectory == "None" :
+            if subdirectory.endswith(".zip"):
+                logging.info(f"Found {subdirectory}")
+                return self.unzip_zip(subdirectory)
+            elif os.path.isdir(subdirectory):
+                work_dir = work_dir + subdirectory
+            else:
+                return make_resp({"message":f"{subdirectory} is not zip or Directory "}, 400)
+
+
         #To fetch all log files
         return self.fetch_log_file(work_dir)
         

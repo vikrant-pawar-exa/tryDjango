@@ -29,7 +29,3 @@ api.add_resource(Comments, '/ticket/<issueIdOrKey>/comments')
 api.add_resource(UpdateComments, '/ticket/<issueIdOrKey>/comments/<commentId>', methods=['PUT'])
 api.add_resource(Transition, '/ticket/<issueIdOrKey>/transition', methods=['POST', 'GET'])
 api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
-
-#Lime api
-api.add_resource(LimePreConvertion, '/lime/setup', methods=['POST'])
-api.add_resource(FetchFile, '/lime/get_log_files/<ticket_id>')
