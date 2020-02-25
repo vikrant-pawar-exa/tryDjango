@@ -6,7 +6,7 @@ class Config(object):
     HOST_JIRA = "exabeam.atlassian.net"
 
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
-    EXA_SECURITY = ""
+    EXA_SECURITY = "/home/vikrant/exa_security"
 
 
 
