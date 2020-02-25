@@ -15,15 +15,22 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 if app.config["ENV"] == "production":
     app.config.from_object(ProductionConfig)
-    logging.basicConfig(filename='log/production.log', level=logging.INFO)
+    logging.basicConfig(
+      format="%(asctime)s - %(module)s - [%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler("log/production.log",mode='w'),
+            logging.StreamHandler()
+        ], level=logging.DEBUG)
+
 else:
     app.config.from_object(DevelopmentConfig)
     logging.basicConfig(
       format="%(asctime)s - %(module)s - [%(levelname)s] %(message)s",
         handlers=[
-            logging.FileHandler("log/developement.log"),
+            logging.FileHandler("log/development.log",mode='w'),
             logging.StreamHandler()
         ], level=logging.DEBUG)
+
 
 
 @app.before_request

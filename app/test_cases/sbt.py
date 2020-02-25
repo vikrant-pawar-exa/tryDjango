@@ -46,8 +46,9 @@ class SBT:
     def __init__(self, workdir=Config.EXA_SECURITY):
         logger.info("Using workdir %s", workdir)
         if not os.path.isdir(workdir):
-            logger.error(workdir + " Doesn't exists, probably initialisation failed")
-            raise ValueError(workdir + " Doesn't exists, probably initialisation failed")
+            msg = "workDir = "+ workdir + " Doesn't exists, probably initialisation failed"
+            logger.error(msg)
+            raise ValueError(msg)
 
         if not os.path.isfile(os.path.join(workdir, "build.sbt")):
             msg = "build.sbt Doesn't exists, EXA_HOME isn't set correctly call may have failed"
@@ -56,7 +57,8 @@ class SBT:
 
         self.workdir = workdir
 
-    def get_html_sbt(self, tmp_file):
+    @staticmethod
+    def get_html_sbt(tmp_file):
 
         conv = Ansi2HTMLConverter()
 
@@ -89,4 +91,7 @@ class SBT:
         logger.debug("sbt command executed %s , %s", output, bool(output.returncode))
         logger.debug("sbt output is stored at  %s ", tmp_file)
 
-        return tmp_file, bool(output.returncode)
+        chk_op = subprocess.run(["grep" , "All tests passed" , tmp_file ], cwd=self.workdir)
+        print (chk_op.check_returncode) 
+
+        return tmp_file, bool(output.returncode == 0)
