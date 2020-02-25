@@ -1,6 +1,6 @@
 .idea
 venv
 /venv/*
-/log/*
+log/*
 __pycache__
 .vscode
