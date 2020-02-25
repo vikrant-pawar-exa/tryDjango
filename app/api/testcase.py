@@ -64,7 +64,6 @@ class test_case(Resource):
         if test_name.lower() == 'pre_test':
             logger.debug("For pre_test")
             subdirectory = request.args.get('subdirectory', default="None", type=str)
-            subdirectory
             try:
                 return Triage().get_log_files(ticket_id, subdirectory)
             except:
