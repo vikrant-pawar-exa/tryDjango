@@ -15,12 +15,8 @@ services:
         image: mongo:4.2.3
         expose:
             - 27017
-        volumes:
-            data_storage: ./data
+        #volumes:
+            #data_storage: ./data
 
-volumes:
-    data_storage:
-
-
-
-            
+#volumes:
+ #   data_storage:
