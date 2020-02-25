@@ -5,11 +5,9 @@ from app.utils.custom_response import make_resp
 from app.utils.constant import Constants
 logger = logging.getLogger(__name__)
 
-GIT_ACCESS_TOKEN = "958ae41bc7e3b778684bb82d04a2542ba33b8f50"
-
 headersObj = {
   "Accept": "application/json",
-  "Authorization":"token {}".format(GIT_ACCESS_TOKEN)
+  "Authorization":"token {}".format(Constants.GIT["ACCESS_TOKEN"])
 }
 
 class GitPullRequest(Resource):

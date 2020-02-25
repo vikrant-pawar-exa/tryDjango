@@ -4,7 +4,7 @@ from config import Config
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT_PATH = os.path.abspath(os.curdir)
-GIT_ACCESS_TOKEN = "958ae41bc7e3b778684bb82d04a2542ba33b8f50"
+
 
 def clone_repo():
     # import pdb; pdb.set_trace()
@@ -17,9 +17,9 @@ def clone_repo():
         os.chdir(PROJECT_ROOT_PATH + "/" + Config.GIT["DEST_REPO_DIR"])
         os.mkdir(username, mode=0o777)
       os.chdir(dest_repo_path)
-      os.system("git clone " + "https://" + GIT_ACCESS_TOKEN + "@github.com/" + Config.GIT["OWNER"] + "/" + Config.GIT["REPO"] + ".git")
+      os.system("git clone " + "https://" + Constants.GIT["ACCESS_TOKEN"] + "@github.com/" + Config.GIT["OWNER"] + "/" + Config.GIT["REPO"] + ".git")
       logger.debug("-------Repo cloned  successfully--------------")
-      return "Cloned the repo successfully" + os.system('pwd')
+      return "Cloned the repo successfully"
     except Exception as e:
       logger.debug("---Exception in cloned repo {}------------------".format(e.args))
 
