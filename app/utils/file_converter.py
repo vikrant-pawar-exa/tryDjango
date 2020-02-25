@@ -1,4 +1,4 @@
-import os, re, logging, subprocess
+import os, re, logging, subprocess, ast
 from fnmatch import fnmatch
 from distutils.dir_util import copy_tree
 from zipfile import ZipFile
@@ -10,13 +10,21 @@ from app.utils.custom_response import make_resp
 from app.utils.constant import Constants
 
 class  Triage:
+
+    def test_source_code_compatible(self,code_data):
+        try:
+            return ast.parse(code_data)
+        except SyntaxError as exc:
+            return False
+
     #Converting csv to log file and returns log file 
     def csv_to_log(self, file):
         sample_file = "sample.log"
         if file.endswith(".csv"):
             logging.info(f'found csv file: {file}')
-            subprocess.check_output("python " + Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file);
-            #os.system("python " + Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file)
+            bash_command= Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file
+            bash_command = "python " + bash_command if self.test_source_code_compatible(Config.FETCH_CSV_SCRIPT) else "python2 " + bash_command
+            subprocess.check_output(bash_command, shell= True)
             return sample_file
         elif file.endswith(".log"):
             logging.info(f'found log file: {file}')
@@ -51,8 +59,8 @@ class  Triage:
         logging.info(f'working directory: {work_dir}')
         
         if not os.path.exists(work_dir + log_file):
-            logging.error(f"Log file  {ticket_path} doesn't exist")
-            return make_resp({"message":"Log file  {ticket_path} doesn't exist"}, 404)
+            logging.error(f"Log file  {log_file} doesn't exist")
+            return make_resp({"message":"Log file  {log_file} doesn't exist"}, 404)
         os.chdir(work_dir)
 
         if log_file.endswith(".zip"):
@@ -60,7 +68,7 @@ class  Triage:
         try:
             log_file_name = self.csv_to_log(log_file)
             if not log_file_name == None:
-                subprocess.check_output(Config.MAKE_SPLUNKCSV_SCRIPT, log_file_name)
+                subprocess.check_output([Config.MAKE_SPLUNKCSV_SCRIPT, log_file_name])
                 os.rename(Constants.FORMATED_SAMPLE_FILE, Constants.SPLUNK_MIXED_LOG_FILE)
                 logging.info('Successfully generated GZ file')
                 return make_resp({"message":"Successfully generated GZ file"}, 200)
