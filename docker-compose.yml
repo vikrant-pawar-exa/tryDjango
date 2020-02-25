@@ -14,8 +14,8 @@ services:
     db:
         image: mongo:3.0.2
         expose:
-            - 27017
+            - 27017 
+        volumes:
+            - ${VOLUME_PATH}:/data
 
 
-
-            
