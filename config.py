@@ -5,6 +5,7 @@ class Config(object):
 
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
     EXA_SECURITY = ""
+    SAMBA_FILEPATH = "/opt/samba/secured"
 
 
 class ProductionConfig(Config):
