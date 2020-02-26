@@ -11,3 +11,6 @@ class Constants(object):
     ROUTES_WITHOUT_TOKEN = ["/api/"]
     TOOLS = ['LIME-AA', 'LIME-DL', 'SBT', 'SAKE']
 
+    FORMATED_SAMPLE_FILE = 'formated_sample.log.gz'
+    SPLUNK_MIXED_LOG_FILE = '00.Splunk.mixed.log.gz'
+

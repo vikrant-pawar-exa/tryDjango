@@ -8,18 +8,27 @@ services:
         restart: always
         ports:
             - "5000:5000"
-        volumes:
-            - /home/akshay/caworkspace/home:/home/user
-            - /home/akshay/caworkspace/opt:/home/opt
         links:
             - db
+        volumes: 
+            - ${EXA_SEC_HOME}:/home/exa-security
+            - ${SMB_Path}:/secure/samba
 
     db:
         image: mongo:4.2.3
         expose:
-            - 27017
-        #volumes:
-            #data_storage: ./data
+            - 27017 
+        volumes:
+            - ${DB_DATA_PATH}:/data
+    
+    ui:
+        build: ../Content-automation-ui/.
+        container_name: ui
+        restart: always
+        ports:
+            - "3000:3000"
+        links: 
+            - flask
 
-#volumes:
- #   data_storage:
+
+

@@ -11,9 +11,12 @@ RUN yum install -y python3
 
 #WORKDIR /home/
 
-COPY . /home/.
+COPY requirements.txt /home/requirements.txt
 
 RUN pip3 install -r requirements.txt
+
+
+COPY . /home/.
 
 ENTRYPOINT [ "python3" ]
 

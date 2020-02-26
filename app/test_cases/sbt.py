@@ -94,4 +94,6 @@ class SBT:
         chk_op = subprocess.run(["grep" , "All tests passed" , tmp_file ], cwd=self.workdir)
         print (chk_op.check_returncode) 
 
-        return tmp_file, bool(output.returncode == 0)
+        status = "Failure" if  output.returncode != 0 else "Sucess"
+
+        return tmp_file, status
