@@ -8,7 +8,6 @@ class ToolsTicketAudit:
 
 	def create_audit(tool_details):
 		try:
-			import pdb; pdb.set_trace()
 			tool_details['tool_executed'] = Constants.TOOLS.index(tool_details['tool_executed'].upper())
 			tool_details['completion_time'] = str(datetime.now())
 			client.tools_and_ticket_logging.insert_one(tool_details)
