@@ -11,7 +11,7 @@ services:
         links:
             - db
         volumes: 
-            - ${EXA_SEC_HOME}:/home/exa-security
+            - ${EXA_SEC_HOME}:/home/exa_security
             - ${SMB_Path}:/secure/samba
     
     db:
