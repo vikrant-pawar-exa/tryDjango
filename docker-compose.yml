@@ -16,6 +16,6 @@ services:
         expose:
             - 27017 
         volumes:
-            - ${VOLUME_PATH}:/data
+            - ${DB_DATA_PATH}:/data
 
 
