@@ -1,6 +1,6 @@
 from app.utils.constant import Constants
 from app.utils.user import get_user_tokens
-import logging, os
+import logging, os, subprocess
 from config import Config
 logger = logging.getLogger(__name__)
 
@@ -20,13 +20,16 @@ def clone_repo(api_token):
         os.chdir(PROJECT_ROOT_PATH + "/" + Config.GIT["DEST_REPO_DIR"])
         os.mkdir(username, mode=0o777)
       os.chdir(dest_repo_path)
-      os.system("git clone " + "https://" + user_tokens["git_token"] + "@github.com/" + Config.GIT["OWNER"] + "/" + Config.GIT["REPO"] + ".git")
-      logger.debug("-------Cloned the repo successfully--------------")
-      os.chdir(Config.GIT["REPO"])
-      branch_checkout = os.system("git checkout -b "+Config.GIT["DEFAULT_BRANCH"])
-      logger.debug("---{}--------------".format(branch_checkout))
-      logger.debug("---Branch List {} --------------".format(os.system("git branch")))
-      return "Cloned and checkout the repo successfully"
+      clone_return_code = subprocess.run("git clone " + "https://" + user_tokens["git_token"] + "@github.com/" + Config.GIT["OWNER"] + "/" + Config.GIT["REPO"] + ".git", shell=True)
+      if clone_return_code.returncode == 0:
+        logger.debug("-------Cloned the repo successfully--------------")
+        os.chdir(Config.GIT["REPO"])
+        branch_checkout = os.system("git checkout -b "+Config.GIT["DEFAULT_BRANCH"])
+        logger.debug("---{}--------------".format(branch_checkout))
+        logger.debug("---Branch List {} --------------".format(os.system("git branch")))
+        return "Cloned and checkout the repo successfully"
+      else:
+        logger.debug("---Error in clone: {} --------------".format(clone_return_code))
     except Exception as e:
       logger.debug("---Exception in clonning repo {}------------------".format(e.args))
 
