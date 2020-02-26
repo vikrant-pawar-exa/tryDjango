@@ -9,7 +9,8 @@ class Config(object):
       "HOST": "https://api.github.com",
       "OWNER": "Test-GS-Lab", # "Exabeam"
       "REPO": "testing-org-repo", # "exa_security"
-      "DEST_REPO_DIR": "git_repo"
+      "DEST_REPO_DIR": "exa_temp_repo",
+      "DEFAULT_BRANCH": "CONT-0001"
     }
 
 class ProductionConfig(Config):

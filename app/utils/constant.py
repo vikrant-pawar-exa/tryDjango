@@ -14,7 +14,6 @@ class Constants(object):
     TOOLS = ['LIME-AA', 'LIME-DL', 'SBT', 'SAKE']
 
     GIT = {
-      "ACCESS_TOKEN": "958ae41bc7e3b778684bb82d04a2542ba33b8f50",
       "REPO_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"],
       "PULL_REQUEST_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"]+"/pulls"
     }

@@ -2,6 +2,7 @@ from flask import Flask, request
 from app.utils.custom_response import make_resp
 import logging, requests, sys
 from config import Config
+from app.models.users import Users
 
 def verify_okta_token(req_headers):
   try:
@@ -32,3 +33,20 @@ def okta_user_info(api_token):
     return requests.post(okta_userinfo_url, headers=headers)
   except:
     logging.error("----Exception in OKTA User info API : {}".format(sys.exc_info()[1]))
+
+def get_user_tokens(api_token):
+  try:
+    resp_info = okta_user_info(api_token)
+    if resp_info.status_code == requests.codes.ok:
+      user_info = Users.get_user(resp_info.json()["email"])
+      return { 
+          "jira_username": user_info["jira_username"],
+          "jira_token": user_info["jira_token"],
+          "git_username": user_info["git_username"],
+          "git_token": user_info['git_token']
+        }
+    else:
+      logging.error("----Exception in okta user info : {}".format(resp_info.status_code))
+  except:
+    logging.error("----Exception in getting user tokens from DB : {}".format(sys.exc_info()[1]))
+
