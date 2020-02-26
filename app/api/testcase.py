@@ -4,7 +4,7 @@ from flask import request, send_file
 from flask_restful import Resource
 
 from app.test_cases.sbt import SBT
-from app.test_cases.test_data import TestData
+from app.test_cases.test_data import Testdata
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +53,8 @@ class test_case(Resource):
                 return send_file(out)
         if test_name.lower() == 'testdata':
             logger.debug("For TestData")
-            my_testdata = TestData(ticket_id)
-            testdata_resp=my_testdata.run_testdata('DEV',ticket_id)
+            my_testdata = Testdata(ticket_id)
+            testdata_resp=my_testdata.run_testdata('DEV',ticket_id[-4:])
             logger.debug(" Got TestData output as  for ticket %s", ticket_id)
             return testdata_resp, 200
 

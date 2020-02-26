@@ -5,7 +5,7 @@ class Config(object):
     DB_HOST = "mongodb://db:27017"
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
     EXA_SECURITY = ""
-    SAMBA_FILEPATH = "/opt/samba/secured"
+    SAMBA_FILEPATH = "/home/opt/samba/secured"
 
 
 class ProductionConfig(Config):

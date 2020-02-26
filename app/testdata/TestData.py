@@ -6,7 +6,7 @@ import sys
 import os
 
 MODE = "NONE"
-SAMBA_FILEPATH = "/opt/samba/secured"
+SAMBA_FILEPATH = "/home/opt/samba/secured"
 LOG_FILEPATH = ""
 MSG_FILEPATH = ""
 
@@ -211,9 +211,16 @@ class TestData():
                         warning[parser][warning_str] = ''
 
             # check if common fields are parsed for the dataType
-        with open("dataType_fields.json", "r") as datatypes:
-            data = datatypes.read()
-            common_fields = json.loads(data)
+
+        if os.path.exists("dataType_fields.json"):
+            with open("dataType_fields.json", "r") as datatypes:
+                data = datatypes.read()
+                common_fields = json.loads(data)
+        else:
+            with open("app/testdata/dataType_fields.json", "r") as datatypes:
+                data = datatypes.read()
+                common_fields = json.loads(data)
+
         if stats[parser]['dataType'] in common_fields.keys():
             mand_fields = set(common_fields[stats[parser]['dataType']])
             parsed_fields = set(stats[parser]['fields'].keys())
