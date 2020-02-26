@@ -10,13 +10,14 @@ services:
             - "5000:5000"
         links:
             - db
+        volumes: 
+            - ${EXA_SEC_HOME}:/home/exa-security
     
     db:
         image: mongo:4.2.3
         expose:
-            - 27017
-        #volumes:
-            #data_storage: ./data
+            - 27017 
+        volumes:
+            - ${DB_DATA_PATH}:/data
 
-#volumes:
- #   data_storage:
+
