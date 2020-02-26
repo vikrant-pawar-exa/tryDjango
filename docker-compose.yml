@@ -12,6 +12,7 @@ services:
             - db
         volumes: 
             - ${EXA_SEC_HOME}:/home/exa-security
+            - ${SMB_Path}:/secure/samba
     
     db:
         image: mongo:4.2.3
@@ -19,5 +20,15 @@ services:
             - 27017 
         volumes:
             - ${DB_DATA_PATH}:/data
+    
+    ui:
+        build: ../Content-automation-ui/.
+        container_name: ui
+        restart: always
+        ports:
+            - "3000:3000"
+        links: 
+            - flask
+
 
 

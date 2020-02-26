@@ -8,8 +8,8 @@ class Config(object):
 
 
     EXABEAM_HOME ="/test/exa_security/martini/"
-    WORK_DIR ='/test/dataInput/'
-    TICKETS_DIR_PATH ='/opt/samba/secured/'
+    WORK_DIR ='/home/tickets'
+    SMB_logs ='/secure/samba'
     FETCH_CSV_SCRIPT ="/opt/exabeam/scripts/FetchColCSV.py"
     MAKE_SPLUNKCSV_SCRIPT ="/opt/exabeam/scripts/make_SplunkCSV.sh"
 
