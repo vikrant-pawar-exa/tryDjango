@@ -3,9 +3,17 @@ class Config(object):
     TESTING = False
     HOST_JIRA = "exabeam.atlassian.net"
     DB_HOST = "mongodb://db:27017"
-    OKTA_HOST_URL = 'https://dev-152236.okta.com'
+    OKTA_HOST_URL = 'https://dev-780755.okta.com'
     EXA_SECURITY = "/home/exa_security"
 
+    GIT = {
+      "HOST": "https://api.github.com",
+      "OWNER": "Test-GS-Lab", # "Exabeam"
+      "REPO": "testing-org-repo", # "exa_security"
+      "DEST_REPO_DIR": "exa_temp_repo",
+      "DEFAULT_BRANCH": "CONT-0001"
+    }
+    EXA_SECURITY = "/home/exa_security"
 
     # EXABEAM_HOME ="/test/exa_security/martini/"
     EXABEAM_HOME = EXA_SECURITY + "/martini"
