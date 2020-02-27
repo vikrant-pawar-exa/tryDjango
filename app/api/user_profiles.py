@@ -23,7 +23,7 @@ class UserProfile(Resource):
 
 	def post(self):
 		params = request.args.to_dict()
-		if not params or not 'email' in params or not 'jira_username' in params or 'jira_token' not in  params or not 'git_token' in params:
+		if not params or not 'email' in params or not 'jira_username' in params or 'jira_token' not in  params or not 'git_token' in params or not 'git_username' in params:
 			raise BadRequest()
 		user = {'email' : request.args['email'],
 	  	'jira_username': request.args['jira_username'],

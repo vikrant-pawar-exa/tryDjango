@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
 from app.api.external.jira import *
+from app.api.external.git import *
 from app.api.testcase import test_case
 from app.api.user import *
 from app.api.user_profiles import *
@@ -30,3 +31,5 @@ api.add_resource(Transition, '/ticket/<issueIdOrKey>/transition', methods=['POST
 api.add_resource(Attachment, '/ticket/<issueIdOrKey>/attach', methods=['POST'])
 
 api.add_resource(UserProfile, '/users', methods=['POST', 'GET'])
+api.add_resource(GitPullRequest, '/git/pulls')
+
