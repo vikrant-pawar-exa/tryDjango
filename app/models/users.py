@@ -16,6 +16,7 @@ class Users:
 			return user
 		except Exception as inst:
 			logging.error("----Error while getting user : {}".format(type(inst)))
+			raise inst
 
 	def new_user(user):
 		try:
@@ -29,3 +30,4 @@ class Users:
 				return new_user.inserted_id
 		except Exception as inst:
 			logging.error("----Error while creating user : {}".format(type(inst)))
+			raise inst

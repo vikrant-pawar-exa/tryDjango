@@ -18,9 +18,16 @@ services:
     db:
         image: mongo:4.2.3
         expose:
-            - 27017 
+            - 27017
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ca-data-root
+            MONGO_INITDB_ROOT_PASSWORD: ${CA_DATA_ROOT_PASSWORD}
+            MONGO_INITDB_USERNAME: ca-data-admin
+            MONGO_INITDB_PASSWORD: ${CA_DATA_ADMIN_PASSWORD}
+            MONGO_INITDB_DATABASE: ca-data
         volumes:
             - ${DB_DATA_PATH}:/data
+            - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
     
     ui:
         build: ../Content-automation-ui/.
@@ -30,6 +37,3 @@ services:
             - "3000:3000"
         links:
             - flask
-
-
-
