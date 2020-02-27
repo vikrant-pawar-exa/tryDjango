@@ -43,13 +43,13 @@ class  Triage:
             logger.error(f'file {file} not found')
             return None
 
-    def unzip_zip(self, log_file):
+    def unzip_zip(self, zip_file):
         logger.info("Exctracting " )
-        extract_dest = os.path.splitext(os.path.basename(log_file))[0]
+        extract_dest = os.path.splitext(os.path.basename(zip_file))[0]
         extracted_log_list = []
         # extracting .csv, .txt, .log files from all .zip files in the directory
-        logger.info("\nFrom: " + log_file)
-        with ZipFile(log_file) as zipObj:
+        logger.info("\nFrom: " + zip_file)
+        with ZipFile(zip_file) as zipObj:
             listOfFileNames = zipObj.namelist()
             logger.info("Extracting: ")
             logger.info(listOfFileNames)
@@ -82,22 +82,24 @@ class  Triage:
 
         return ticket_dir
 
-    def lime_setup(self, ticket_number, log_file):      
+    def pre_test_setup(self, ticket_number, file_path):      
         # Should be pre_test setup 
         work_dir = Config.WORK_DIR + f'/{ticket_number}/dataInput/' + datetime.today().strftime('%Y-%m-%d')+ "/"
         logger.info(f'working directory: {work_dir}')
-        logger.info("checking for file %s ", work_dir + log_file)
+        logger.info("checking for file %s ", work_dir + file_path)
         
-        if not os.path.exists(work_dir + log_file):
-            logger.error(f"Log file  {log_file} doesn't exist")
-            return make_resp({"message":f"Log file  {log_file} doesn't exist"}, 404)
+        if not os.path.exists(work_dir + file_path):
+            logger.error(f"Log file  {file_path} doesn't exist")
+            return make_resp({"message":f"Log file  {file_path} doesn't exist"}, 404)
         os.chdir(work_dir)
 
         try:
-            log_file_name = self.csv_to_log(log_file)
+            file_path = re.sub(" ","\ ",file_path)
+            log_file_name = self.csv_to_log(file_path)
             if not log_file_name == None:
                 subprocess.check_output([Config.MAKE_SPLUNKCSV_SCRIPT, log_file_name])
-                os.rename(Constants.FORMATED_SAMPLE_FILE, Constants.SPLUNK_MIXED_LOG_FILE)
+                formated_log_gz_file_name = Constants.FORMATED_LOG_GZ_FILE_PREFIX + log_file_name + ".gz"
+                os.rename(formated_log_gz_file_name, Constants.SPLUNK_MIXED_LOG_FILE)
                 logger.info('Successfully generated GZ file')
                 return make_resp({"message":"Successfully generated GZ file"}, 200)
             else:
