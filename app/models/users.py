@@ -22,7 +22,7 @@ class Users:
 			user['jira_token'] = TokenConversion.encrypt_token(user['jira_token'])
 			user['git_token'] = TokenConversion.encrypt_token(user['git_token'])
 			if client.user_profiles.find_one({'email': user['email']}):
-				updated_user = client.user_profiles.update_one({'email': user['email']}, user)
+				updated_user = client.user_profiles.update_one({'email': user['email']}, { "$set": user} )
 				return updated_user.id
 			else:
 				new_user = client.user_profiles.insert_one(user)
