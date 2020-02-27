@@ -13,6 +13,7 @@ services:
         volumes: 
             - ${EXA_SEC_HOME}:/home/exa_security
             - ${SMB_Path}:/secure/samba
+            - ${EXA_Scripts}:/opt/exabeam/scripts
     
     db:
         image: mongo:4.2.3
