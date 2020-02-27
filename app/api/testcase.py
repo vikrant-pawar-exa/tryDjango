@@ -6,6 +6,7 @@ from app.utils.file_converter import Triage
 from app.utils.custom_response import make_resp
 
 from app.test_cases.sbt import SBT
+from app.test_cases.test_data import Testdata
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,8 @@ class test_case(Resource):
         logger.info("Got request to get result of  %s test for %s", test_name, ticket_id)
         logger.info("Request {}".format(request.args))
 
-        if test_name not in ('sbt', 'sake', 'lime', 'pre_test'):
+
+        if test_name not in ('sbt', 'sake', 'lime', 'pre_test', 'testdata'):
             error_msg = "Invalid test_name {0}".format(test_name)
             logger.error(error_msg)
             return {"Error": error_msg}, 400
@@ -64,6 +66,12 @@ class test_case(Resource):
                 out = SBT.get_html_sbt(need_html)
                 logger.debug("Output --- Got Output Request " + out)
                 return send_file(out)
+        if test_name.lower() == 'testdata':
+            logger.debug("For TestData")
+            my_testdata = Testdata(ticket_id)
+            testdata_resp=my_testdata.run_testdata('DEV', ticket_id)
+            logger.debug(" Got TestData output as  for ticket %s", ticket_id)
+            return testdata_resp, 200
         if test_name.lower() == 'pre_test':
             logger.debug("For pre_test")
             subdirectory = request.args.get('subdirectory', default="None", type=str)

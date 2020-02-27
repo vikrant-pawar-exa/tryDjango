@@ -13,7 +13,7 @@ services:
         volumes: 
             - ${EXA_SEC_HOME}:/home/exa_security
             - ${SMB_Path}:/secure/samba
-    
+
     db:
         image: mongo:4.2.3
         expose:
@@ -27,7 +27,7 @@ services:
         restart: always
         ports:
             - "3000:3000"
-        links: 
+        links:
             - flask
 
 
