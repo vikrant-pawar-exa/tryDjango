@@ -10,12 +10,26 @@ services:
             - "5000:5000"
         links:
             - db
+        volumes: 
+            - ${EXA_SEC_HOME}:/home/exa_security
+            - ${SMB_Path}:/secure/samba
+            - ${EXA_Scripts}:/opt/exabeam/scripts
     
     db:
-        image: mongo:3.0.2
+        image: mongo:4.2.3
         expose:
-            - 27017
+            - 27017 
+        volumes:
+            - ${DB_DATA_PATH}:/data
+    
+    ui:
+        build: ../Content-automation-ui/.
+        container_name: ui
+        restart: always
+        ports:
+            - "3000:3000"
+        links:
+            - flask
 
 
 
-            
