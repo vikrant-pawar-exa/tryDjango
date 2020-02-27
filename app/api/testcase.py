@@ -69,7 +69,7 @@ class test_case(Resource):
         if test_name.lower() == 'testdata':
             logger.debug("For TestData")
             my_testdata = Testdata(ticket_id)
-            testdata_resp=my_testdata.run_testdata('DEV',ticket_id[-4:])
+            testdata_resp=my_testdata.run_testdata('DEV', ticket_id)
             logger.debug(" Got TestData output as  for ticket %s", ticket_id)
             return testdata_resp, 200
         if test_name.lower() == 'pre_test':

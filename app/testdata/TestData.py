@@ -6,7 +6,7 @@ import sys
 import os
 
 MODE = "NONE"
-SAMBA_FILEPATH = "/home/opt/samba/secured"
+SAMBA_FILEPATH = "/secure/samba"#"/home/tickets"
 LOG_FILEPATH = ""
 MSG_FILEPATH = ""
 

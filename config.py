@@ -5,9 +5,7 @@ class Config(object):
     DB_HOST = "mongodb://db:27017"
     OKTA_HOST_URL = 'https://dev-780755.okta.com'
 
-    SAMBA_FILEPATH = "/home/opt/samba/secured"
     EXA_SECURITY = "/home/exa_security"
-
 
     EXABEAM_HOME ="/test/exa_security/martini/"
     WORK_DIR ='/home/tickets'
