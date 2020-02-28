@@ -36,11 +36,9 @@ class test_case(Resource):
                 json_data = request.get_json(force=True)
                 if not json_data:
                      return make_resp({'message': 'No input data provided'}, 400)
-                # ticket_number = json_data["ticketNumber"]
-                # Ticket number is in URL
                 log_file_path = json_data["logFilePath"]
                 # Assuming log path as /samba/<ticketDir>
-                return Triage().lime_setup(ticket_id, log_file_path)
+                return Triage().pre_test_setup(ticket_id, log_file_path)
 
         except ValueError as ve:
             logger.error("Got execption %s", ve)
