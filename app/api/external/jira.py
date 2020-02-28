@@ -188,7 +188,7 @@ class Transition(Resource):
             print(status)
             if status == '':
                 raise BadRequest
-            url = SCHEME + 'localhost:8080' + '/rest/api/2/issue/{}/transitions'.format(issueIdOrKey)
+            url = SCHEME + Config.HOST_JIRA + '/rest/api/2/issue/{}/transitions'.format(issueIdOrKey)
             print(url)
             headers = {
 
@@ -200,13 +200,13 @@ class Transition(Resource):
                 response_json = json.loads(response.text)
                 transitions = response_json['transitions']
                 for transition in transitions:
-                    if str(transition["name"]) == str(status):
+                    if (str(transition["name"])).lower() == (str(status)).lower():
                         transition_id = transition['id']
                         data = {"transition": {"id": transition_id}}
                         post_response = requests.request("POST", url, auth=HTTPBasicAuth(jira_username,
                                                                                          jira_token), headers=headers,
                                                          data=json.dumps(data))
-                        if post_response.status_code == 204:
+                        if post_response.status_code == 200:
                             ticket_status= {
                                 "jira_ticket": issueIdOrKey,
                                 "user": jira_username,
