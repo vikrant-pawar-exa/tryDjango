@@ -1,13 +1,18 @@
-import os, re, logging, subprocess, ast
-from fnmatch import fnmatch
-from distutils.dir_util import copy_tree
-from zipfile import ZipFile
+import ast
+import importlib
+import logging
+import os
+import re
+import subprocess
 from datetime import datetime
+from distutils.dir_util import copy_tree
+from fnmatch import fnmatch
 from shutil import copyfile
+from zipfile import ZipFile
 
-from config import Config
-from app.utils.custom_response import make_resp
 from app.utils.constant import Constants
+from app.utils.custom_response import make_resp
+from config import Config
 
 logger = logging.getLogger(__name__)
 class  Triage:
@@ -16,6 +21,7 @@ class  Triage:
         try:
             return ast.parse(code_data)
         except SyntaxError as exc:
+            logger.exception("Syntax error")
             return False
 
     #Converting csv to log file and returns log file 
@@ -24,7 +30,10 @@ class  Triage:
         if file.endswith(".csv"):
             logger.info(f'found csv file: {file}')
             bash_command= Config.FETCH_CSV_SCRIPT + " " +  file + " > " +sample_file
-            bash_command = "python " + bash_command if self.test_source_code_compatible(Config.FETCH_CSV_SCRIPT) else "python2 " + bash_command
+            bash_command = "python3 " + bash_command if self.test_source_code_compatible(Config.FETCH_CSV_SCRIPT) else "python2 " + bash_command
+            # my_module = importlib.import_module(Config.FETCH_CSV_SCRIPT)
+            logger.info(f'Running command {bash_command}')
+
             subprocess.check_output(bash_command, shell= True)
             return sample_file
         elif file.endswith(".log"):
@@ -75,8 +84,9 @@ class  Triage:
 
     def lime_setup(self, ticket_number, log_file):      
         # Should be pre_test setup 
-        work_dir = Config.WORK_DIR + datetime.today().strftime('%Y-%m-%d')+ "/"
+        work_dir = Config.WORK_DIR + f'/{ticket_number}/dataInput/' + datetime.today().strftime('%Y-%m-%d')+ "/"
         logger.info(f'working directory: {work_dir}')
+        logger.info("checking for file %s ", work_dir + log_file)
         
         if not os.path.exists(work_dir + log_file):
             logger.error(f"Log file  {log_file} doesn't exist")
@@ -144,4 +154,3 @@ class  Triage:
 
         #To fetch all log files
         return self.fetch_log_file(work_dir)
-        
