@@ -11,7 +11,7 @@ from app.utils.user import verify_okta_token
 from config import ProductionConfig, DevelopmentConfig
 
 app = Flask("CA_backend")
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/*": {"Access-Control-Allow-Origin": "*"}})
 
 if app.config["ENV"] == "production":
     app.config.from_object(ProductionConfig)
@@ -33,7 +33,7 @@ else:
 
 
 
-@app.before_request
+# @app.before_request
 def verify_access_token():
     if request.path not in Constants.ROUTES_WITHOUT_TOKEN:
         return verify_okta_token(request.headers)
