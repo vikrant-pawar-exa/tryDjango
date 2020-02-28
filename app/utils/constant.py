@@ -18,6 +18,6 @@ class Constants(object):
       "REPO_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"],
       "PULL_REQUEST_URL": Config.GIT["HOST"]+"/repos/"+Config.GIT["OWNER"]+"/"+Config.GIT["REPO"]+"/pulls"
     }
-    FORMATED_SAMPLE_FILE = 'formated_sample.log.gz'
+    FORMATED_LOG_GZ_FILE_PREFIX = 'formated_'
     SPLUNK_MIXED_LOG_FILE = '00.Splunk.mixed.log.gz'
 
