@@ -10,6 +10,7 @@ import logging
 
 from app.utils.custom_response import make_resp
 
+logger = logging.getLogger(__name__)
 class UserProfile(Resource):
 	def get(self):
 		try:
@@ -24,6 +25,7 @@ class UserProfile(Resource):
 	def post(self):
 		params = request.args.to_dict()
 		if not params or not 'email' in params or not 'jira_username' in params or 'jira_token' not in  params or not 'git_token' in params or not 'git_username' in params:
+			logger.error("Invalid data "+ params)
 			raise BadRequest()
 		user = {'email' : request.args['email'],
 	  	'jira_username': request.args['jira_username'],
