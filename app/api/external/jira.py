@@ -184,11 +184,12 @@ class Transition(Resource):
         logging.info('Enter in Transition JIRA api')
         try:
             getToken()
+            temp_issueIdOrKey = "CONT-7803"
             status = request.args.get('status', '')
             print(status)
             if status == '':
                 raise BadRequest
-            url = SCHEME + Config.HOST_JIRA + '/rest/api/2/issue/{}/transitions'.format(issueIdOrKey)
+            url = SCHEME + Config.HOST_JIRA + '/rest/api/2/issue/{}/transitions'.format(temp_issueIdOrKey)
             print(url)
             headers = {
 
